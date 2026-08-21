@@ -199,6 +199,44 @@
   transform-origin: bottom center;
 }
 
+/* --- Button Glow Pulse Keyframes & Utilities --- */
+@keyframes glow-pulse-primary {
+  0%, 100% {
+    box-shadow: 0 4px 20px -2px rgba(139, 92, 246, 0.5), 0 0 16px rgba(59, 130, 246, 0.35), 0 0 35px rgba(217, 70, 239, 0.2);
+    border-color: rgba(139, 92, 246, 0.6);
+  }
+  50% {
+    box-shadow: 0 6px 32px 2px rgba(217, 70, 239, 0.75), 0 0 28px rgba(139, 92, 246, 0.6), 0 0 55px rgba(59, 130, 246, 0.4);
+    border-color: rgba(217, 70, 239, 0.9);
+  }
+}
+
+@keyframes glow-pulse-secondary {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0), 0 0 10px rgba(59, 130, 246, 0.12);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 18px 2px rgba(139, 92, 246, 0.4), 0 0 28px rgba(59, 130, 246, 0.22);
+    border-color: rgba(139, 92, 246, 0.55);
+  }
+}
+
+@keyframes glow-pulse-subtle {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(96, 165, 250, 0);
+  }
+  50% {
+    box-shadow: 0 0 16px 2px rgba(139, 92, 246, 0.35);
+  }
+}
+
+/* Universal Button Glow Pulse */
+button:not([disabled]) {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* --- Gradient & 3D Interactive Buttons --- */
 .btn-gradient-primary {
   background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #D946EF 100%);
@@ -206,7 +244,8 @@
   background-position: 0% 0%;
   color: #FFFFFF;
   font-weight: 800;
-  box-shadow: 0 8px 28px -4px rgba(139, 92, 246, 0.45), 0 0 16px rgba(59, 130, 246, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  animation: glow-pulse-primary 3.2s ease-in-out infinite;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow, background-position;
   position: relative;
@@ -234,7 +273,9 @@
 .btn-gradient-primary:hover {
   background-position: 100% 100%;
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 38px -4px rgba(217, 70, 239, 0.5), 0 0 24px rgba(139, 92, 246, 0.45);
+  box-shadow: 0 16px 42px -2px rgba(217, 70, 239, 0.75), 0 0 32px rgba(139, 92, 246, 0.65), 0 0 60px rgba(59, 130, 246, 0.45);
+  border-color: rgba(255, 255, 255, 0.5);
+  animation: none;
 }
 
 .btn-gradient-primary:hover::after {
@@ -243,7 +284,7 @@
 
 .btn-gradient-primary:active {
   transform: translateY(-1px) scale(0.99);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
 }
 
 .btn-outline-secondary {
@@ -252,6 +293,7 @@
   color: #F8FAFC;
   font-weight: 700;
   backdrop-filter: blur(12px);
+  animation: glow-pulse-secondary 4s ease-in-out infinite;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, box-shadow, border-color;
   position: relative;
@@ -261,8 +303,9 @@
   border-color: #8B5CF6;
   color: #FFFFFF;
   transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.25), 0 0 15px rgba(59, 130, 246, 0.15);
-  background: rgba(139, 92, 246, 0.1);
+  box-shadow: 0 12px 34px rgba(139, 92, 246, 0.4), 0 0 25px rgba(59, 130, 246, 0.3);
+  background: rgba(139, 92, 246, 0.15);
+  animation: none;
 }
 
 .btn-outline-secondary:active {
@@ -390,7 +433,9 @@
   .animate-satellite-1,
   .animate-satellite-2,
   .animate-satellite-3,
-  .animate-shimmer-sweep {
+  .animate-shimmer-sweep,
+  .btn-gradient-primary,
+  .btn-outline-secondary {
     animation: none !important;
   }
   .animate-word-tilt {
