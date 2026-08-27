@@ -903,3 +903,4 @@ input[type="search"]::-webkit-search-results-decoration {
     transform: rotateX(3deg) rotateY(-4deg) !important;
   }
 }
+html { overflow-x: hidden; }
