@@ -5,9 +5,10 @@ import { SEOHead } from '../components/SEOHead';
 interface PolicyProps {
   navigate: (path: string) => void;
   type: 'privacy' | 'terms' | 'refund' | 'disclaimer';
+  canonicalPath?: string;
 }
 
-export const PolicyPage: React.FC<PolicyProps> = ({ navigate, type }) => {
+export const PolicyPage: React.FC<PolicyProps> = ({ navigate, type, canonicalPath }) => {
   const getTitle = () => {
     switch (type) {
       case 'privacy': return 'Privacy Policy';
@@ -26,15 +27,17 @@ export const PolicyPage: React.FC<PolicyProps> = ({ navigate, type }) => {
     }
   };
 
+  const activeCanonical = canonicalPath || `/${type}`;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
       <SEOHead
         title={`${getTitle()} | BRANIFY`}
         description={getDesc()}
-        canonicalPath={`/${type}`}
+        canonicalPath={activeCanonical}
         breadcrumbs={[
           { name: 'Home', url: '/' },
-          { name: getTitle(), url: `/${type}` }
+          { name: getTitle(), url: activeCanonical }
         ]}
       />
       <button

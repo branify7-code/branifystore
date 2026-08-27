@@ -43,6 +43,7 @@ export async function generateDynamicSitemapXml(): Promise<string> {
   addUrl('/services', 0.9, 'weekly');
   addUrl('/digital-products', 0.9, 'daily');
   addUrl('/free-tools', 0.9, 'weekly');
+  addUrl('/tools', 0.9, 'weekly');
   addUrl('/ai-tools', 0.9, 'weekly');
   addUrl('/portfolio', 0.8, 'weekly');
   addUrl('/pricing', 0.8, 'weekly');

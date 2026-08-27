@@ -256,11 +256,32 @@ function MainAppContent() {
         canonicalPath: '/admin'
       };
     }
-    if (['/privacy', '/terms', '/refund', '/disclaimer'].includes(currentPath)) {
+    if (currentPath === '/privacy' || currentPath === '/privacy-policy') {
       return {
-        title: 'Legal Policies & Terms of Service | BRANIFY',
-        description: 'Official legal policies, privacy standards, and refund terms of BRANIFY.',
+        title: 'Privacy Policy | BRANIFY',
+        description: 'Read the BRANIFY Privacy Policy to understand how we protect, handle, and secure your personal and project information.',
         canonicalPath: currentPath
+      };
+    }
+    if (currentPath === '/terms' || currentPath === '/terms-and-conditions') {
+      return {
+        title: 'Terms of Service | BRANIFY',
+        description: 'Read the BRANIFY Terms of Service outlining agreements, intellectual property, and service conditions.',
+        canonicalPath: currentPath
+      };
+    }
+    if (currentPath === '/refund' || currentPath === '/refund-policy') {
+      return {
+        title: 'Refund & Cancellation Policy | BRANIFY',
+        description: 'Read the BRANIFY Refund and Cancellation Policy regarding digital products and custom agency milestones.',
+        canonicalPath: currentPath
+      };
+    }
+    if (currentPath === '/disclaimer') {
+      return {
+        title: 'Legal Disclaimer | BRANIFY',
+        description: 'Legal disclaimer and operational terms for BRANIFY digital studio and storefront.',
+        canonicalPath: '/disclaimer'
       };
     }
 
@@ -442,31 +463,31 @@ function MainAppContent() {
         </Suspense>
       );
     }
-    if (currentPath === '/privacy') {
+    if (currentPath === '/privacy' || currentPath === '/privacy-policy') {
       return (
         <Suspense fallback={<PageLoadingFallback />}>
-          <PolicyPage navigate={navigate} type="privacy" />
+          <PolicyPage navigate={navigate} type="privacy" canonicalPath={currentPath} />
         </Suspense>
       );
     }
-    if (currentPath === '/terms') {
+    if (currentPath === '/terms' || currentPath === '/terms-and-conditions') {
       return (
         <Suspense fallback={<PageLoadingFallback />}>
-          <PolicyPage navigate={navigate} type="terms" />
+          <PolicyPage navigate={navigate} type="terms" canonicalPath={currentPath} />
         </Suspense>
       );
     }
-    if (currentPath === '/refund') {
+    if (currentPath === '/refund' || currentPath === '/refund-policy') {
       return (
         <Suspense fallback={<PageLoadingFallback />}>
-          <PolicyPage navigate={navigate} type="refund" />
+          <PolicyPage navigate={navigate} type="refund" canonicalPath={currentPath} />
         </Suspense>
       );
     }
     if (currentPath === '/disclaimer') {
       return (
         <Suspense fallback={<PageLoadingFallback />}>
-          <PolicyPage navigate={navigate} type="disclaimer" />
+          <PolicyPage navigate={navigate} type="disclaimer" canonicalPath="/disclaimer" />
         </Suspense>
       );
     }

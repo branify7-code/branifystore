@@ -10,7 +10,7 @@ export function WhatsAppFloat() {
   const isEnabled = settings?.whatsappConfig?.floatingButtonEnabled ?? true;
   if (!isEnabled) return null;
 
-  const whatsappPhone = settings?.whatsappConfig?.whatsappNumber || settings?.contactWhatsApp || '+1 581 907-2960';
+  const whatsappPhone = settings?.whatsappConfig?.whatsappNumber || settings?.contactWhatsApp || '+92 332 1029333';
   const defaultMessage = settings?.whatsappConfig?.defaultMessage || 'Hi BRANIFY, I am visiting your website and would like to chat about a project / digital product.';
   const displayName = settings?.whatsappConfig?.displayName || 'Chat with us on WhatsApp';
   const whatsappUrl = getWhatsAppLink(whatsappPhone, defaultMessage);
