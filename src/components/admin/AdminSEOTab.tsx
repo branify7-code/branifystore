@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import {
   Search, Save, Globe, Share2, Code2, RefreshCw, BarChart,
   FileText, Map, FileCode, Link2, AlertTriangle, CheckCircle2,
@@ -123,18 +124,120 @@ export const AdminSEOTab: React.FC = () => {
   const [seoForm, setSeoForm] = useState<Partial<RouteSEO>>({});
   const [isSaving, setIsSaving] = useState(false);
 
-  const dups = useMemo(() => findDuplicates(), []);
-  const score = useMemo(() => overallScore(), []);
-  const routesWithIssues = useMemo(() => ROUTES.map(r => ({ route: r, issues: checkRoute(r), score: routeScore(r) })), []);
+  const dups = useMemo(() => { const titles: Record<string, string[]> = {}; const descs: Record<string, string[]> = {}; const canon: Record<string, string[]> = {}; for (const r of seoPages) { (titles[r.title] ||= []).push(r.path); (descs[r.description] ||= []).push(r.path); (canon[r.canonical] ||= []).push(r.path); } return { dupTitles: Object.entries(titles).filter(([, v]) => v.length > 1), dupDescs: Object.entries(descs).filter(([, v]) => v.length > 1), dupCanon: Object.entries(canon).filter(([, v]) => v.length > 1) }; }, [seoPages]);
+  const score = useMemo(() => { const scores = seoPages.map(routeScore); return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length); }, [seoPages]);
+  const routesWithIssues = useMemo(() => seoPages.map(r => ({ route: r, issues: checkRoute(r), score: routeScore(r) })), [seoPages]);
+
+  const [seoPages, setSeoPages] = useState<RouteSEO[]>(ROUTES);
+  const [seoLoading, setSeoLoading] = useState(false);
+  const [seoError, setSeoError] = useState<string | null>(null);
+  const [seoSuccess, setSeoSuccess] = useState<string | null>(null);
+
+  // Load SEO data from Supabase on mount
+  useEffect(() => {
+    if (!isSupabaseConfigured() || !supabase) return;
+    setSeoLoading(true);
+    supabase
+      .from('seo_pages')
+      .select('route, seo_title, meta_description, canonical_url, robots_index, robots_follow, schema_type, og_title, og_description, page_type')
+      .then(({ data, error }) => {
+        setSeoLoading(false);
+        if (error) {
+          setSeoError(error.message);
+          return;
+        }
+        if (data && data.length > 0) {
+          // Merge DB data with local ROUTES (DB takes priority for fields it has)
+          const dbMap: Record<string, any> = {};
+          data.forEach((r: any) => { dbMap[r.route] = r; });
+          const merged = ROUTES.map(r => {
+            const db = dbMap[r.path];
+            if (!db) return r;
+            return {
+              ...r,
+              title: db.seo_title || r.title,
+              description: db.meta_description || r.description,
+              canonical: db.canonical_url || r.canonical,
+              ogUrl: db.canonical_url || r.ogUrl,
+              robots: db.robots_index === false ? 'noindex, ' + (db.robots_follow === false ? 'nofollow' : 'follow') : 'index, follow',
+              schema: db.schema_type || r.schema,
+              type: db.page_type || r.type,
+            };
+          });
+          setSeoPages(merged);
+        }
+      });
+  }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!editingRoute || !seoForm) return;
     setIsSaving(true);
-    await new Promise(r => setTimeout(r, 800));
-    setIsSaving(false);
-    setEditingRoute(null);
+    setSeoError(null);
+    setSeoSuccess(null);
+
+    const route = editingRoute.path;
+    const robotsIndex = !(seoForm.robots || 'index, follow').includes('noindex');
+    const robotsFollow = !(seoForm.robots || 'index, follow').includes('nofollow');
+
+    const payload = {
+      route,
+      page_type: editingRoute.type,
+      seo_title: seoForm.title || editingRoute.title,
+      meta_description: seoForm.description || editingRoute.description,
+      canonical_url: seoForm.canonical || editingRoute.canonical,
+      robots_index: robotsIndex,
+      robots_follow: robotsFollow,
+      og_title: seoForm.title || editingRoute.title,
+      og_description: seoForm.description || editingRoute.description,
+      schema_type: editingRoute.schema,
+      updated_at: new Date().toISOString(),
+    };
+
+    try {
+      if (!isSupabaseConfigured() || !supabase) {
+        throw new Error('Supabase not configured');
+      }
+
+      // Upsert: insert if missing, update if exists (on route)
+      const { error } = await supabase
+        .from('seo_pages')
+        .upsert(payload, { onConflict: 'route' });
+
+      if (error) throw error;
+
+      // Update local state (optimistic)
+      setSeoPages(prev => prev.map(r =>
+        r.path === route
+          ? { ...r, title: payload.seo_title || r.title, description: payload.meta_description || r.description, canonical: payload.canonical_url || r.canonical, ogUrl: payload.canonical_url || r.ogUrl }
+          : r
+      ));
+
+      setSeoSuccess('SEO data saved successfully.');
+      setTimeout(() => setSeoSuccess(null), 3000);
+      setEditingRoute(null);
+    } catch (err: any) {
+      setSeoError(err.message || 'Failed to save SEO data. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
+  {seoLoading && (
+    <div className="flex items-center gap-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-300">
+      <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Loading SEO data from database...
+    </div>
+  )}
+  {seoError && (
+    <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-300">
+      <XCircle className="w-3.5 h-3.5" /> {seoError}
+    </div>
+  )}
+  {seoSuccess && (
+    <div className="flex items-center gap-2 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs text-emerald-300">
+      <CheckCircle2 className="w-3.5 h-3.5" /> {seoSuccess}
+    </div>
+  )}
   const subTabs: { id: SubTab; label: string; icon: React.ElementType }[] = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart },
     { id: 'pages', label: 'Page SEO', icon: FileText },
