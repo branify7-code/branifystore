@@ -85,8 +85,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ navigate }) => {
                 <div>
                   <div className="text-[10px] font-extrabold text-[#E2C27B] uppercase">Head Office (USA)</div>
                   <div className="font-bold text-white">111, Elm AVE, Glen Cove, New York</div>
-                  <a href="tel:+15819072960" className="text-zinc-400 hover:text-white font-semibold block pt-0.5">
-                    Phone: +1 (581) 907-2960
+                  <a href="tel:+8801879176373" className="text-zinc-400 hover:text-white font-semibold block pt-0.5">
+                    Phone: +880 1879-176373
                   </a>
                 </div>
               </div>
