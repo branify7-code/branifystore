@@ -150,4 +150,4 @@ function generateSchema(type, item, url, title, description, image) {
   return base;
 }
 
-module.exports = { generateSEO, SITE_URL, DEFAULT_OG_IMAGE, DEFAULT_DESC };
+export { generateSEO, SITE_URL, DEFAULT_OG_IMAGE, DEFAULT_DESC };
