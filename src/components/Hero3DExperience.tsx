@@ -416,7 +416,7 @@ export const Hero3DExperience: React.FC<Hero3DExperienceProps> = ({ navigate }) 
                 <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-b from-[#C9A45C]/30 via-[#E2C27B]/10 to-[#C9A45C]/20 opacity-80 pointer-events-none" />
 
                 <img
-                  src="/branify-hero-sculpture.jpg"
+                  src="/branify-hero-sculpture.png"
                   alt="BRANIFY 3D Luxury Executive Sculpture"
                   className="w-full h-full object-cover object-center rounded-2xl transform group-hover:scale-[1.02] transition-transform duration-700 select-none"
                   referrerPolicy="no-referrer"
@@ -424,7 +424,7 @@ export const Hero3DExperience: React.FC<Hero3DExperienceProps> = ({ navigate }) 
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.onerror = null;
-                    target.src = '/branify-logo.png';
+                    target.src = '/branify-logo.svg';
                   }}
                 />
 
