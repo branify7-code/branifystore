@@ -1,6 +1,7 @@
 {
-  "name": "BRANIFY",
-  "description": "International digital agency, digital products marketplace, and 100+ free browser tools.",
+  "name": "Branify — Luxury Digital Studio & Futuristic Technology",
+  "description": "Branify is a premier digital technology and creative agency specializing in next-generation web design, AI solutions, branding, software engineering, and digital products.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
+
