@@ -159,7 +159,7 @@ export const navItemsWithDropdowns: NavCategory[] = [
     label: 'Free Tools',
     href: '#tools',
     route: '/free-tools',
-    badge: '10+ Live',
+    badge: '100+',
     items: [
       {
         id: 'password-gen',
@@ -218,7 +218,7 @@ export const navItemsWithDropdowns: NavCategory[] = [
     label: 'AI Tools',
     href: '#ai-tools',
     route: '/ai-tools',
-    badge: 'New AI',
+    badge: '27+',
     items: [
       {
         id: 'ai-copy-architect',

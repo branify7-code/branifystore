@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 BRANIFY
               </span>
               <span className="text-[8.5px] uppercase tracking-[0.25em] text-white/40 -mt-1 font-mono">
-                Studio
+                BUILD. BRAND. GROW.
               </span>
             </div>
           </button>
@@ -249,7 +249,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <div className="relative flex items-center gap-1.5 text-xs uppercase tracking-widest font-bold text-[#F3E5AB] group-hover:text-[#08090B] transition-colors">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Consult</span>
+                <span>Book a Consultation</span>
                 <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
             </button>
